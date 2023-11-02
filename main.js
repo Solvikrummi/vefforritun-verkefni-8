@@ -1,5 +1,11 @@
 import { createCartLine, showCartContent } from './lib/ui.js';
-
+/**
+ * @typedef {Object} Product 
+ * @property {number} id
+ * @property {string} title
+ * @property {string} description
+ * @property {number} price
+ */
 const products = [
   {
     id: 1,
@@ -22,19 +28,24 @@ const products = [
   },
 ];
 
-/** Bæta vöru í körfu */
+/** Bæta vöru í körfu
+ * @param {Product} product 
+ * @param {number} quantity
+ * 
+ */
 function addProductToCart(product, quantity) {
   // Hér þarf að finna `<tbody>` í töflu og setja `cartLine` inn í það
-  const cart = document.querySelector('.cart-content');
+  const cartTableBodyElement = document.querySelector('.cart table tbody');
+  console.log('cartTableBodyElement :>>', cartTableBodyElement)
 
-  if (!cart) {
-    console.warn('fann ekki .cart');
+  if (!cartTableBodyElement) {
+    console.warn('fann ekki .cart table');
     return;
   }
   
   // TODO hér þarf að athuga hvort lína fyrir vöruna sé þegar til
   const cartLine = createCartLine(product, quantity);
-  cart.appendChild(cartLine);
+  cartTableBodyElement.appendChild(cartLine);
 
   // Sýna efni körfu
   showCartContent(true);
@@ -54,6 +65,9 @@ function submitHandler(event) {
 
   // Finnum vöru með þessu productId
   const product = products.find((i) => i.id === productId);
+  if (!product){
+    return;
+  }
 
   // TODO hér þarf að finna fjölda sem á að bæta við körfu með því að athuga
   // á input
